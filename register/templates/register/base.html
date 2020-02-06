@@ -1,4 +1,5 @@
 <!-- base.html -->
+{% load static %}
 <!doctype html>
 <html>
 <head>
@@ -95,6 +96,7 @@
   border-radius: 50%;
 }
 
+
     </style>
 
 	<meta charset="utf-8">
@@ -115,10 +117,17 @@
 
 	<div id="content" name="content" class="main">
 		{% if user.is_authenticated %}
+
+		<a href="#" class="notification">
+  		<span>Inbox</span>
+  		<span class="badge">3</span>
+		</a>
+
 		<p class="text-right">Logged in as {{ user.username }} / <a href="/logout/"> <span >Log out</span></a></p>
 		{% else %}
 		<p class="text-right"><a href="/login/">Log in</a> / <a href="/register/">Register</a> </p>
 		{% endif %}
+
 		<div class="row justify-content-center">
 			<div class="col-8" id="event_container">
 				<h1 class="mt-2">Chat with Channels </h1>

@@ -3,6 +3,7 @@ import json
 from channels.db import database_sync_to_async
 from chat.models  import Message, Thread
 from django.contrib.auth import get_user_model
+from channels.exceptions import DenyConnection
 
 User = get_user_model()
 
@@ -18,15 +19,22 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             )
 
             await self.accept()
+
         else:
-            await self.disconnect()
+            self.channel_name = 'anonymous'
+            self.room_group_name = 'anonymous'
+            await self.channel_layer.group_add(
+                self.room_group_name,
+                self.channel_name
+            )
+            await self.close(code=4003)
+
 
     async def disconnect(self, close_code):
-        print(close_code)
-        await self.channel_layer.group_discard(
+            await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
-        )
+            )
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)

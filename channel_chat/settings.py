@@ -25,7 +25,7 @@ SECRET_KEY = 'vq@*kxv7#&8(3u*!zo^9noahf*_ayf-=_#s+5k0ly&9$jj9p3h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -120,7 +120,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/chat/Lobby'
