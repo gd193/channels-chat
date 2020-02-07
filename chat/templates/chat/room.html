@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-	<link rel='stylesheet' href="{% static 'css/style.css' %}" type="text/css">
 
 {% for message in last_messages %}
     {% if message.author.username == user.username %}

@@ -3,113 +3,25 @@
 <!doctype html>
 <html>
 <head>
-	<style type="text/css">
-		.sidenav {
-			height:100%;
-			width:160px;
-			position: fixed;
-			z-index:1;
-			top:0;
-			left:0;
-			background-color:#111;
-			overflow-x: :hidden;
-			padding-top:20px;
-		}
-
-                .sidenav a {
-			padding:6px 8px 6px 16px;
-			text-decoration: none;
-			font-size:25px;
-			color: #818181;
-			display:block;
-		}
-
-                .sidenav a:hover{
-			color:#f1f1f1;
-		}
-
-                .main{
-			margin-left:160px;
-			padding: 0px 10px;
-		}
-		.container {
-  border: 2px solid #dedede;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-}
-
-/* Darker chat container */
-.darker {
-  border-color: #bbb;
-  background-color: #ccc;
-}
-
-/* Clear floats */
-.container::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-/* Style images */
-.container img {
-  float: left;
-  max-width: 60px;
-  width: 100%;
-  margin-right: 20px;
-  border-radius: 50%;
-}
-
-/* Style the right image */
-.container img.right {
-  float: right;
-  margin-left: 20px;
-  margin-right:0;
-}
-
-/* Style time text */
-.time-right {
-  float: right;
-  color: #aaa;
-}
-
-/* Style time text */
-.time-left {
-  float: left;
-  color: #999;
-}
-
-.user-left {
-  float: left;
-  max-width: 60px;
-  width: 100%;
-  margin-right: 20px;
-  border-radius: 50%;
-}
-.user-right {
-  float: right;
-  max-width: 60px;
-  width: 100%;
-  margin-left: 20px;
-  border-radius: 50%;
-}
-
-
-    </style>
 
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel='stylesheet' href="{% static 'css/style.css' %}" type="text/css">
 
 	<title>{% block title %} Chat with Channels {% endblock %}</title>
 </head>
 
 <body>
+
 	<div class="sidenav">
+		<a  href="#" class="notification" id="inbox">
+  		<span>Inbox</span>
+  		<span class="badge">3</span>
+		</a>
 		<a href="/chat/Lobby/">Lobby</a>
+
 		{% for user in user_list %}
 		<a href="/chat/{{ user.username }}">{{ user.username }}</a>
 		{% endfor %}
@@ -117,11 +29,6 @@
 
 	<div id="content" name="content" class="main">
 		{% if user.is_authenticated %}
-
-		<a href="#" class="notification">
-  		<span>Inbox</span>
-  		<span class="badge">3</span>
-		</a>
 
 		<p class="text-right">Logged in as {{ user.username }} / <a href="/logout/"> <span >Log out</span></a></p>
 		{% else %}
@@ -139,7 +46,37 @@
 		</div>
 	</div>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<div class="sidebar">
+  <h2>Notifications</h2>
+  <div class="notibox">
+    Wash the Car
+   <div class="cancel" onclick="cancel_click(this)">✕</div>
+  </div>
+  <div class="notibox">
+    Do Laundry
+    <div class="cancel" onclick="cancel_click(this)">✕</div>
+  </div>
+  <div class="notibox">
+    Feed the Cat
+    <div class="cancel" onclick="cancel_click(this)">✕</div>
+  </div>
+</div>
+<script>
+
+ document.querySelector('#inbox').onclick = function(e) {
+ 		console.log("toggling sidebar");
+ 		var sidebar = document.querySelector(".sidebar");
+ 		sidebar.classList.toggle('active');
+    };
+
+  function cancel_click(caller) {
+  	console.log("toggling visibility");
+  	console.log(caller);
+  	var parent = caller.closest('.notibox');
+  	parent.classList.toggle('gone');
+  }
+</script>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
