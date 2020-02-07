@@ -15,10 +15,10 @@
 
 <body>
 
-	<div class="sidenav">
+	<div id='notification_bar' class="sidenav">
 		<a  href="#" class="notification" id="inbox">
   		<span>Inbox</span>
-  		<span class="badge">3</span>
+  		<span class="badge" id="notification_counter"></span>
 		</a>
 		<a href="/chat/Lobby/">Lobby</a>
 
@@ -48,26 +48,9 @@
 
 	<div class="sidebar">
   <h2>Notifications</h2>
-  <div class="notibox">
-    Wash the Car
-   <div class="cancel" onclick="cancel_click(this)">✕</div>
-  </div>
-  <div class="notibox">
-    Do Laundry
-    <div class="cancel" onclick="cancel_click(this)">✕</div>
-  </div>
-  <div class="notibox">
-    Feed the Cat
-    <div class="cancel" onclick="cancel_click(this)">✕</div>
-  </div>
 </div>
 <script>
 
- document.querySelector('#inbox').onclick = function(e) {
- 		console.log("toggling sidebar");
- 		var sidebar = document.querySelector(".sidebar");
- 		sidebar.classList.toggle('active');
-    };
 
   function cancel_click(caller) {
   	console.log("toggling visibility");

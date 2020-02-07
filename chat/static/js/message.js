@@ -1,15 +1,47 @@
 
+ document.querySelector('#inbox').onclick = function(e) {
+ 		var sidebar = document.getElementById('notification_bar');
+ 		notes = sidebar.children
+ 		for (var i=0;i<notes.length;i++){
+ 		    console.log(i);
+ 			var timestamp = notes[i].id;
+ 			var len = notes[i].getAttribute('len_time');
+ 			var str = notes[i].innerHTML;
+ 			str = str.slice(0, -len);
+ 			str += timesince(timestamp);
+ 			notes[i].innerHTML = str;
+ 		}
+
+
+ 		console.log("toggling sidebar");
+ 		var sidebar = document.querySelector(".sidebar");
+ 		sidebar.classList.toggle('active');
+ 		var counter = document.getElementById("notification_counter");
+		counter.innerHTML = '';
+    };
+
     var chatSocket = new WebSocket(
         'ws://' + window.location.host +
         '/ws/chat/' + roomName + '/');
 
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
+
+        if (data['type'] === 'message') {
         var message = data['message'];
         var timestamp = data['timestamp']
         var username = data['user']
 
         drawMessage(message, username, timestamp);
+        }
+
+        else if (data['type'] === 'notification') {
+            if (!(window.location.href.includes(data['user']))) {
+                console.log('notification from ' + data['user']);
+                add_Notificationcount();
+                drawNotification(data['user'], data['timestamp']);
+        }
+        }
     };
 
     chatSocket.onclose = function(e) {
@@ -67,3 +99,54 @@
 
 
     };
+
+    function drawNotification(username, timestamp) {
+        var block_to_insert = document.createElement('div');
+        var container_block = document.getElementsByClassName('sidebar')[0];
+        var cancel = document.createElement('div');
+        var delta_t = timesince(timestamp).toLowerCase();
+
+        block_to_insert.setAttribute('class', 'notibox');
+        block_to_insert.setAttribute('id', timestamp);
+        console.log('length '+ delta_t.length);
+        block_to_insert.setAttribute('len_time', delta_t.length);
+        block_to_insert.innerHTML = 'You recieved a message by ' + username + ' ' + delta_t;
+        cancel.setAttribute('class', 'cancel');
+        cancel.setAttribute('onclick', 'cancel_click(this)');
+        cancel.innerHTML = 'x';
+
+        block_to_insert.appendChild(cancel);
+        container_block.appendChild(block_to_insert)
+
+
+    }
+
+    function timesince(timestamp) {
+
+        const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
+        timestamp += ':00';
+        timestamp = '20' + timestamp;
+        var time = Date.parse(timestamp);
+        var now = Date.now();
+        var diff = Math.abs(now - time) - (1000 * 60 * 60);
+        console.log(diff);
+        if (diff/1000 < 60) {
+            return 'Just a Moment ago';
+        }
+        else if (diff/(1000 * 60) < 60) {
+            delta_t = Math.round(diff/(1000*60));
+            return rtf1.format(-delta_t, 'minutes');
+        }
+        else {
+        delta_t = Math.round(diff/(1000*60*60));
+        return rtf1.format(-delta_t, 'hours');
+        }
+    }
+
+     function add_Notificationcount() {
+       var counter = document.getElementById('notification_counter');
+       var n = parseInt(counter.innerHTML);
+       if (n) {}
+       else { n=0; }
+       counter.innerHTML = n+1;
+    }

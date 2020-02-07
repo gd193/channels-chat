@@ -18,6 +18,11 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 self.channel_name
             )
 
+            await self.channel_layer.group_add(
+                self.scope['user'].username,
+                self.channel_name,
+            )
+
             await self.accept()
 
         else:
@@ -37,6 +42,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             )
 
     async def receive(self, text_data):
+        print(f"channel name: {self.channel_name}")
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         username = self.scope['user'].username
@@ -52,13 +58,40 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             }
         )
 
+        if not('Lobby' in self.room_group_name):
+            threadname = await self.get_thread_name()
+            print(f"threadaname 1: {threadname}")
+            other_users = await self.get_other_users_in_thread(threadname)
+            print(f"otherusers b4 send: {other_users}")
+            for user in other_users:
+                await self.channel_layer.group_send(
+                    user,
+                    {
+                        'type': 'notification',
+                        'user': username,
+                        'timestamp' : time,
+                    }
+                )
+            print(time)
+
     async def chat_message(self, event):
         message = event['message']
         username = event['user']
         time = event['timestamp']
 
         await self.send(text_data=json.dumps({
+            'type' : 'message',
             'message': message,
+            'user' : username,
+            'timestamp' : time,
+        }))
+
+    async def notification(self, event):
+        username = event['user']
+        time = event['timestamp']
+
+        await self.send(text_data=json.dumps({
+            'type' : 'notification',
             'user' : username,
             'timestamp' : time,
         }))
@@ -83,3 +116,15 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             return thread[0].name
 
 
+    @database_sync_to_async
+    def get_other_users_in_thread(self, threadname):
+        username = self.scope['user'].username
+
+        thread = Thread.objects.filter(name__exact=threadname)[0]
+        users = thread.members
+        users = users.exclude(username__exact=username)
+        print(f"users : {users}")
+        usernames = []
+        for user in users:
+            usernames.append(user.username)
+        return usernames
