@@ -1,9 +1,8 @@
 
  document.querySelector('#inbox').onclick = function(e) {
- 		var sidebar = document.getElementById('notification_bar');
- 		notes = sidebar.children
- 		for (var i=0;i<notes.length;i++){
- 		    console.log(i);
+ 		var sidebar = document.getElementsByClassName('sidebar')[0];
+ 		notes = sidebar.children;
+ 		for (var i=1;i<notes.length;i++){ //0th Element is the default header in the sidebar and not a notification
  			var timestamp = notes[i].id;
  			var len = notes[i].getAttribute('len_time');
  			var str = notes[i].innerHTML;
@@ -126,10 +125,9 @@
         const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
         timestamp += ':00';
         timestamp = '20' + timestamp;
-        var time = Date.parse(timestamp);
+        var time = Date.parse(timestamp)
         var now = Date.now();
         var diff = Math.abs(now - time) - (1000 * 60 * 60);
-        console.log(diff);
         if (diff/1000 < 60) {
             return 'Just a Moment ago';
         }
