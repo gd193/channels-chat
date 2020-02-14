@@ -24,3 +24,8 @@ class Message(models.Model):
 
     def __str__(self):
         return self.author.username
+
+class Notification(models.Model):
+    author = models.ForeignKey(User, related_name='author_notification', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    receiver = models.ForeignKey(User, related_name='receiver_notification', on_delete=models.CASCADE)

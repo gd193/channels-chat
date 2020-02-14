@@ -28,13 +28,11 @@
     </fieldset>
     {% endif %}
 </form>
-
-
 <script>
     var authenticated = {{ user.is_authenticated | yesno:"true,false" }};
     var roomName = {{ room_name_json }};
+
 </script>
 <script src="{% static 'js/message.js' %}" type="text/javascript"></script>
-
 
 {% endblock %}

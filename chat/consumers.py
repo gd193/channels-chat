@@ -1,7 +1,7 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 from channels.db import database_sync_to_async
-from chat.models  import Message, Thread
+from chat.models  import Message, Thread, Notification
 from django.contrib.auth import get_user_model
 from channels.exceptions import DenyConnection
 
@@ -64,6 +64,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             other_users = await self.get_other_users_in_thread(threadname)
             print(f"otherusers b4 send: {other_users}")
             for user in other_users:
+                await self.save_notification(author=username, receiver=user, timestamp=time)
                 await self.channel_layer.group_send(
                     user,
                     {
@@ -103,6 +104,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         message = Message(author = user, content = content, thread = thread)
         message.save()
         return message.timestamp.strftime('%y-%m-%d %H:%M')
+
+    @database_sync_to_async
+    def save_notification(self, author, receiver, timestamp):
+        author = User.objects.get(username=author)
+        receiver = User.objects.get(username=receiver)
+        notification = Notification(author = author, timestamp = timestamp, receiver = receiver)
+        notification.save()
 
     @database_sync_to_async
     def get_thread_name(self):

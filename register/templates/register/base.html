@@ -49,6 +49,11 @@
 	<div class="sidebar">
   <h2>Notifications</h2>
 </div>
+
+	{% for note in notifications %}
+        <script> drawNotification("{{ note.author }}", "{{ note.timestamp|date:"y-m-d H:i" }}");</script>
+	{% endfor %}
+
 <script>
 
 
