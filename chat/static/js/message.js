@@ -3,12 +3,13 @@
  		var sidebar = document.getElementsByClassName('sidebar')[0];
  		notes = sidebar.children;
  		for (var i=1;i<notes.length;i++){ //0th Element is the default header in the sidebar and not a notification
- 			var timestamp = notes[i].id;
+ 			var timestamp = notes[i].getAttribute('timestamp');
  			var len = notes[i].getAttribute('len_time');
  			var str = notes[i].innerHTML;
- 			str = str.slice(0, -len);
- 			str += timesince(timestamp);
- 			notes[i].innerHTML = str;
+ 			content = str.split("<div")[0];
+ 			content = content.slice(0, -len);
+ 			content += timesince(timestamp);
+ 			notes[i].innerHTML = content + "<div" + str.split("<div")[1] ;
  		}
 
 
@@ -17,7 +18,13 @@
  		sidebar.classList.toggle('active');
  		var counter = document.getElementById("notification_counter");
 		counter.innerHTML = '';
+
+		  	chatSocket.send(JSON.stringify({
+  			'tag' : 'toggling_sidebar',
+        }));
     };
+
+
 
     var chatSocket = new WebSocket(
         'ws://' + window.location.host +
@@ -37,8 +44,11 @@
         else if (data['type'] === 'notification') {
             if (!(window.location.href.includes(data['user']))) {
                 console.log('notification from ' + data['user']);
+                if (document.getElementsByClassName("sidebar active").length === 0) {
                 add_Notificationcount();
-                drawNotification(data['user'], data['timestamp']);
+                }
+                drawNotification(data['user'], data['timestamp'], data['key']);
+                console.log(data)
         }
         }
     };
@@ -58,7 +68,8 @@
         var messageInputDom = document.querySelector('#chat-message-input');
         var message = messageInputDom.value;
         chatSocket.send(JSON.stringify({
-            'message': message
+            'tag' : 'message',
+            'message': message,
         }));
 
         messageInputDom.value = '';
@@ -81,7 +92,7 @@
         time.setAttribute('class', 'time-right');
         author.setAttribute('class', 'user-left');
 
-        if (authenticated && (username === "{{ user.username }}" )) {
+        if (authenticated && (username === current_user )) {
             block_to_insert.setAttribute('class', 'container');
         }
         else {
@@ -99,25 +110,25 @@
 
     };
 
-    function drawNotification(username, timestamp) {
+    function drawNotification(username, timestamp, key) {
         var block_to_insert = document.createElement('div');
         var container_block = document.getElementsByClassName('sidebar')[0];
         var cancel = document.createElement('div');
         var delta_t = timesince(timestamp).toLowerCase();
 
+
         block_to_insert.setAttribute('class', 'notibox');
-        block_to_insert.setAttribute('id', timestamp);
-        console.log('length '+ delta_t.length);
+        block_to_insert.setAttribute('id', key);
+        block_to_insert.setAttribute('timestamp',timestamp);
         block_to_insert.setAttribute('len_time', delta_t.length);
+        block_to_insert.setAttribute('author', username);
         block_to_insert.innerHTML = 'You recieved a message by ' + username + ' ' + delta_t;
         cancel.setAttribute('class', 'cancel');
         cancel.setAttribute('onclick', 'cancel_click(this)');
         cancel.innerHTML = 'x';
-
+        container_block.appendChild(block_to_insert);
+        document.getElementById('notification_bar').appendChild(cancel);
         block_to_insert.appendChild(cancel);
-        container_block.appendChild(block_to_insert)
-
-
     }
 
     function timesince(timestamp) {

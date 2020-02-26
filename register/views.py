@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
+from register.forms import RegisterForm
 from django.contrib.auth import get_user_model
-from chat.models import Thread
+from chat.models import Thread, Notification
 
 User = get_user_model()
 
@@ -10,16 +10,16 @@ User = get_user_model()
 
 def register(response):
     if response.method == "POST":
-        form = UserCreationForm(response.POST)
+        form = RegisterForm(response.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            new_user = User.objects.filter(username__exact = username)[0]
-            users = User.objects.exclude(username__exact = username)
+            new_user = User.objects.filter(username__exact=username)[0]
+            users = User.objects.exclude(username__exact=username)
 
             for user in users:
                 thread_name = 'Thread_private_'+username+'_'+user.username
-                new_thread = Thread(name = thread_name)
+                new_thread = Thread(name=thread_name)
                 new_thread.save()
                 print(new_user, user)
                 new_thread.members.add(new_user, user)
@@ -29,5 +29,5 @@ def register(response):
             print("error")
 
     else:
-        form = UserCreationForm()
+        form = RegisterForm()
     return render(response, "register/register.html", {"form": form})

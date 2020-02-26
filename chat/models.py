@@ -1,6 +1,13 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
+from django.db.models import F
 # Create your models here.
+
+
+class CustomUser(AbstractUser):
+    count = models.IntegerField(default = 0)
 
 User = get_user_model()
 
@@ -29,3 +36,18 @@ class Notification(models.Model):
     author = models.ForeignKey(User, related_name='author_notification', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     receiver = models.ForeignKey(User, related_name='receiver_notification', on_delete=models.CASCADE)
+    key = models.IntegerField(default=0)
+
+    def __hash__(self):
+        return hash((self.author.username, self.receiver.username, self.timestamp, self.pk))
+
+    def save(self, *args, **kwargs):
+        self.key = self.__hash__()
+        super(Notification, self).save(*args, **kwargs)
+
+@receiver(models.signals.post_save, sender=Notification)
+def execute_after_save(sender, instance, created, *args, **kwargs):
+    if created:
+        user = instance.receiver
+        user.count = F('count') + 1
+        user.save()

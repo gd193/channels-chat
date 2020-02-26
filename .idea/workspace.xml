@@ -3,12 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="edae22c4-34d0-4d86-8b1e-304787ce61ef" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/channel_chat/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/channel_chat/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/consumers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/migrations/0002_auto_20200106_1545.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/migrations/0003_auto_20200106_1548.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/register/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/static/js/message.js" beforeDir="false" afterPath="$PROJECT_DIR$/chat/static/js/message.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat/templates/chat/room.html" beforeDir="false" afterPath="$PROJECT_DIR$/chat/templates/chat/room.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/register/templates/register/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/register/templates/register/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/register/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/register/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +25,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -37,7 +44,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/chat/static/css" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../channel_chat2" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -110,7 +117,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581669457380</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="notification_bar">
+      <created>1581675248054</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1581675248054</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -136,18 +150,26 @@
     <option name="LAST_COMMIT_MESSAGE" value="notification_bar" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="250" y="121" width="836" height="807" key="CommitChangelistDialog2" timestamp="1581669457199">
+    <state x="406" y="273" width="524" height="502" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1581692892120">
       <screen x="67" y="27" width="1213" height="997" />
     </state>
-    <state x="250" y="121" width="836" height="807" key="CommitChangelistDialog2/67.27.1213.997@67.27.1213.997" timestamp="1581669457199" />
+    <state x="406" y="273" width="524" height="502" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/67.27.1213.997@67.27.1213.997" timestamp="1581692892120" />
+    <state x="250" y="121" width="836" height="807" key="CommitChangelistDialog2" timestamp="1581675247953">
+      <screen x="67" y="27" width="1213" height="997" />
+    </state>
+    <state x="250" y="121" width="836" height="807" key="CommitChangelistDialog2/67.27.1213.997@67.27.1213.997" timestamp="1581675247953" />
+    <state x="153" y="282" width="424" height="484" key="FileChooserDialogImpl" timestamp="1581692246762">
+      <screen x="67" y="27" width="1213" height="997" />
+    </state>
+    <state x="153" y="282" width="424" height="484" key="FileChooserDialogImpl/67.27.1213.997@67.27.1213.997" timestamp="1581692246762" />
     <state x="162" y="160" key="SettingsEditor" timestamp="1580982700388">
       <screen x="67" y="27" width="1213" height="997" />
     </state>
     <state x="162" y="160" key="SettingsEditor/67.27.1213.997@67.27.1213.997" timestamp="1580982700388" />
-    <state x="329" y="353" key="com.intellij.ide.util.TipDialog" timestamp="1581667501505">
+    <state x="329" y="353" key="com.intellij.ide.util.TipDialog" timestamp="1582704727136">
       <screen x="67" y="27" width="1213" height="997" />
     </state>
-    <state x="329" y="353" key="com.intellij.ide.util.TipDialog/67.27.1213.997@67.27.1213.997" timestamp="1581667501505" />
+    <state x="329" y="353" key="com.intellij.ide.util.TipDialog/67.27.1213.997@67.27.1213.997" timestamp="1582704727136" />
     <state x="441" y="444" width="454" height="160" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581067764503">
       <screen x="67" y="27" width="1213" height="997" />
     </state>

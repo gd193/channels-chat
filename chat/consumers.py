@@ -7,6 +7,7 @@ from channels.exceptions import DenyConnection
 
 User = get_user_model()
 
+
 class LobbyConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         if self.scope['user'].is_authenticated:
@@ -34,46 +35,54 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             )
             await self.close(code=4003)
 
-
     async def disconnect(self, close_code):
-            await self.channel_layer.group_discard(
+        await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
-            )
-
-    async def receive(self, text_data):
-        print(f"channel name: {self.channel_name}")
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        username = self.scope['user'].username
-        time = await self.save_message(message, username)
-
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'user' : username,
-                'timestamp' : time,
-            }
         )
 
-        if not('Lobby' in self.room_group_name):
-            threadname = await self.get_thread_name()
-            print(f"threadaname 1: {threadname}")
-            other_users = await self.get_other_users_in_thread(threadname)
-            print(f"otherusers b4 send: {other_users}")
-            for user in other_users:
-                await self.save_notification(author=username, receiver=user, timestamp=time)
-                await self.channel_layer.group_send(
-                    user,
-                    {
-                        'type': 'notification',
-                        'user': username,
-                        'timestamp' : time,
-                    }
-                )
-            print(time)
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        if text_data_json['tag'] == 'message':
+
+            message = text_data_json['message']
+            username = self.scope['user'].username
+            time = await self.save_message(message, username)
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                  'type': 'chat_message',
+                  'message': message,
+                  'user' : username,
+                   'timestamp' : time,
+                }
+            )
+
+            if not('Lobby' in self.room_group_name):
+                threadname = await self.get_thread_name()
+                other_users = await self.get_other_users_in_thread(threadname)
+                for user in other_users:
+                    notification_key = await self.save_notification(author=username, receiver=user, timestamp=time)
+                    print(notification_key)
+                    await self.channel_layer.group_send(
+                        user,
+                        {
+                            'type': 'notification',
+                            'user': username,
+                            'timestamp' : time,
+                            'key' : notification_key,
+                        }
+                    )
+        elif text_data_json['tag'] == 'deleted_notification':
+            print(text_data_json)
+            author_username = text_data_json['author']
+            key = int(text_data_json['key'])
+            await self.delete_notification(author_username, key)
+
+        elif text_data_json['tag'] == 'toggling_sidebar' :
+            await self.reset_user_count()
+
 
     async def chat_message(self, event):
         message = event['message']
@@ -90,11 +99,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def notification(self, event):
         username = event['user']
         time = event['timestamp']
+        key = event['key']
 
         await self.send(text_data=json.dumps({
             'type' : 'notification',
             'user' : username,
             'timestamp' : time,
+            'key' : key
         }))
 
     @database_sync_to_async
@@ -111,10 +122,19 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         receiver = User.objects.get(username=receiver)
         notification = Notification(author = author, timestamp = timestamp, receiver = receiver)
         notification.save()
+        return notification.__hash__()
+
+    @database_sync_to_async
+    def delete_notification(self, author, key):
+        notification = Notification.objects.get(key=key)
+        if notification.receiver == self.scope['user'] and notification.author.username == author:
+            notification.delete()
+
 
     @database_sync_to_async
     def get_thread_name(self):
         room_name = self.scope['url_route']['kwargs']['room_name']
+        print(self.scope['url_route']['kwargs'])
         if room_name == 'Lobby':
             return room_name
         username = self.scope['user'].username
@@ -131,8 +151,13 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         thread = Thread.objects.filter(name__exact=threadname)[0]
         users = thread.members
         users = users.exclude(username__exact=username)
-        print(f"users : {users}")
         usernames = []
         for user in users:
             usernames.append(user.username)
         return usernames
+
+    @database_sync_to_async
+    def reset_user_count(self):
+        user = self.scope['user']
+        user.count = 0
+        user.save()

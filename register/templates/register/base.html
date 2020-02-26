@@ -18,7 +18,7 @@
 	<div id='notification_bar' class="sidenav">
 		<a  href="#" class="notification" id="inbox">
   		<span>Inbox</span>
-  		<span class="badge" id="notification_counter"></span>
+  		<span class="badge" id="notification_counter">{% if user.is_authenticated %}{% if user.count > 0 %}{{ user.count }}{% endif %}{% endif %}</span>
 		</a>
 		<a href="/chat/Lobby/">Lobby</a>
 
@@ -51,7 +51,7 @@
 </div>
 
 	{% for note in notifications %}
-        <script> drawNotification("{{ note.author }}", "{{ note.timestamp|date:"y-m-d H:i" }}");</script>
+        <script> drawNotification("{{ note.author }}", "{{ note.timestamp|date:"y-m-d H:i" }}", "{{note.key}}");</script>
 	{% endfor %}
 
 <script>
@@ -62,6 +62,18 @@
   	console.log(caller);
   	var parent = caller.closest('.notibox');
   	parent.classList.toggle('gone');
+
+  	var author = String(parent.getAttribute('author'));
+  	console.log('parent.author ', author);
+  	var key = String(parent.getAttribute('id'));
+  	console.log(key);
+  	chatSocket.send(JSON.stringify({
+  			'tag' : 'deleted_notification',
+            'author' : author,
+            'key' : key,
+        }));
+
+
   }
 </script>
 	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
