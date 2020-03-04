@@ -49,14 +49,14 @@
                 if (document.getElementsByClassName("sidebar active").length === 0) {
                     add_Notificationcount();
                 }
-                drawNotification(data['user'], data['timestamp'], data['key1'].concat(data['key2']));
-                console.log(data)
-                if (document.getElementsByClassName('sidebar active') !== 0) {
-                    chatSocket.send(JSON.stringify({
-                        'tag' : 'toggling_sidebar',
-                    }));
-                    }
-                }
+            }
+
+            drawNotification(data['user'], data['timestamp'], data['key1'].concat(data['key2']));
+            if (document.getElementsByClassName('sidebar active') !== 0) {
+                chatSocket.send(JSON.stringify({
+                    'tag' : 'toggling_sidebar',
+                }));
+            }
 
             else {
                  chatSocket.send(JSON.stringify({
