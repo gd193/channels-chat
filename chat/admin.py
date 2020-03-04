@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 # Register your models here.
 
-from chat.models import Thread, Notification
+from chat.models import Thread, Notification, Message
 
 class NotificationAdmin(admin.ModelAdmin):
 
@@ -14,3 +14,4 @@ class NotificationAdmin(admin.ModelAdmin):
 admin.site.register(get_user_model())
 admin.site.register(Thread)
 admin.site.register(Notification, NotificationAdmin)
+admin.site.register(Message)

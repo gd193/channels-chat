@@ -3,6 +3,8 @@ import json
 from channels.db import database_sync_to_async
 from chat.models  import Message, Thread, Notification
 from django.contrib.auth import get_user_model
+from pytz import timezone
+from math import trunc
 from channels.exceptions import DenyConnection
 
 User = get_user_model()
@@ -64,18 +66,21 @@ class LobbyConsumer(AsyncWebsocketConsumer):
                 other_users = await self.get_other_users_in_thread(threadname)
                 for user in other_users:
                     notification_key = await self.save_notification(author=username, receiver=user, timestamp=time)
-                    print(notification_key)
+                    notification_key = str(notification_key)
+                    l = len(notification_key)
+                    key1 = notification_key[0:trunc(l/2)]
+                    key2 = notification_key[trunc(l/2):]
                     await self.channel_layer.group_send(
                         user,
                         {
                             'type': 'notification',
                             'user': username,
                             'timestamp' : time,
-                            'key' : notification_key,
+                            'key1' : key1,
+                            'key2' : key2,
                         }
                     )
         elif text_data_json['tag'] == 'deleted_notification':
-            print(text_data_json)
             author_username = text_data_json['author']
             key = int(text_data_json['key'])
             await self.delete_notification(author_username, key)
@@ -99,13 +104,15 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     async def notification(self, event):
         username = event['user']
         time = event['timestamp']
-        key = event['key']
+        key1 = event['key1']
+        key2 = event['key2']
 
         await self.send(text_data=json.dumps({
             'type' : 'notification',
             'user' : username,
             'timestamp' : time,
-            'key' : key
+            'key1' : key1,
+            'key2' : key2,
         }))
 
     @database_sync_to_async
@@ -114,7 +121,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         thread = Thread.objects.filter(name=self.room_name)[0]
         message = Message(author = user, content = content, thread = thread)
         message.save()
-        return message.timestamp.strftime('%y-%m-%d %H:%M')
+        return message.timestamp.astimezone(timezone(('CET'))).strftime('%y-%m-%d %H:%M')
 
     @database_sync_to_async
     def save_notification(self, author, receiver, timestamp):
@@ -134,7 +141,6 @@ class LobbyConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_thread_name(self):
         room_name = self.scope['url_route']['kwargs']['room_name']
-        print(self.scope['url_route']['kwargs'])
         if room_name == 'Lobby':
             return room_name
         username = self.scope['user'].username

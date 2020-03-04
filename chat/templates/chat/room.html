@@ -1,4 +1,4 @@
-{% extends "register/base.html" %}
+{% extends "chat/base.html" %}
 {% load static %}
 
 {% block content %}
@@ -10,7 +10,7 @@
  <div class="container darker">
      {% endif %}
      <strong class = "user-left" >{{ message.author }}</strong>
-     <span class="time-right">{{ message.timestamp|date:'y-m-d H:M' }}</span>
+     <span class="time-right">{{ message.timestamp|date:"y-m-d H:i" }}</span>
           <br/>
     <p>{{ message.content }}</p>
 </div>

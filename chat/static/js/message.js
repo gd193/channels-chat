@@ -22,6 +22,7 @@
 		  	chatSocket.send(JSON.stringify({
   			'tag' : 'toggling_sidebar',
         }));
+        return false;
     };
 
 
@@ -37,19 +38,31 @@
         var message = data['message'];
         var timestamp = data['timestamp']
         var username = data['user']
-
+        console.log(timestamp)
         drawMessage(message, username, timestamp);
         }
 
         else if (data['type'] === 'notification') {
+            console.log(data['key']);
             if (!(window.location.href.includes(data['user']))) {
                 console.log('notification from ' + data['user']);
                 if (document.getElementsByClassName("sidebar active").length === 0) {
-                add_Notificationcount();
+                    add_Notificationcount();
                 }
-                drawNotification(data['user'], data['timestamp'], data['key']);
+                drawNotification(data['user'], data['timestamp'], data['key1'].concat(data['key2']));
                 console.log(data)
-        }
+                if (document.getElementsByClassName('sidebar active') !== 0) {
+                    chatSocket.send(JSON.stringify({
+                        'tag' : 'toggling_sidebar',
+                    }));
+                    }
+                }
+
+            else {
+                 chatSocket.send(JSON.stringify({
+                        'tag' : 'toggling_sidebar',
+                    }));
+                    }
         }
     };
 
@@ -77,7 +90,7 @@
 
     function drawMessage(message,username,timestamp) {
         var block_to_insert, container_block, content, author, time , br;
-
+            console.log('timestamp',timestamp);
         block_to_insert = document.createElement('div');
         container_block = document.getElementById('event_container');
         author = document.createElement('strong');
@@ -116,7 +129,6 @@
         var cancel = document.createElement('div');
         var delta_t = timesince(timestamp).toLowerCase();
 
-
         block_to_insert.setAttribute('class', 'notibox');
         block_to_insert.setAttribute('id', key);
         block_to_insert.setAttribute('timestamp',timestamp);
@@ -146,9 +158,13 @@
             delta_t = Math.round(diff/(1000*60));
             return rtf1.format(-delta_t, 'minutes');
         }
-        else {
+        else if (diff/(1000 * 60 * 60) < 24) {
         delta_t = Math.round(diff/(1000*60*60));
         return rtf1.format(-delta_t, 'hours');
+        }
+        else {
+        delta_t = Math.round(diff/(1000 * 60 * 60));
+        return rtf1.format(-delta_t,'days');
         }
     }
 

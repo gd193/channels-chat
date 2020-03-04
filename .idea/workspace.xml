@@ -6,16 +6,11 @@
       <change beforePath="$PROJECT_DIR$/channel_chat/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/channel_chat/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/consumers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/migrations/0002_auto_20200106_1545.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/migrations/0003_auto_20200106_1548.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/register/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/chat/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat/static/js/message.js" beforeDir="false" afterPath="$PROJECT_DIR$/chat/static/js/message.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat/templates/chat/index.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/chat/templates/chat/room.html" beforeDir="false" afterPath="$PROJECT_DIR$/chat/templates/chat/room.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/register/templates/register/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/register/templates/register/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/register/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/register/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/register/templates/register/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/chat/templates/chat/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,13 +43,14 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/chat/static/css" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/chat/templates/chat" />
       <recent name="$PROJECT_DIR$/register" />
       <recent name="C:\Users\2fast4U\Desktop\HiWi-django\channel_chat\register\templates\register" />
       <recent name="C:\Users\2fast4U\Desktop\HiWi-django\channel_chat\chat\templates\chat" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/chat/static/css" />
     </key>
   </component>
   <component name="RunManager">
@@ -154,10 +150,10 @@
       <screen x="67" y="27" width="1213" height="997" />
     </state>
     <state x="406" y="273" width="524" height="502" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/67.27.1213.997@67.27.1213.997" timestamp="1581692892120" />
-    <state x="250" y="121" width="836" height="807" key="CommitChangelistDialog2" timestamp="1581675247953">
+    <state x="250" y="121" width="836" height="807" key="CommitChangelistDialog2" timestamp="1582732400306">
       <screen x="67" y="27" width="1213" height="997" />
     </state>
-    <state x="250" y="121" width="836" height="807" key="CommitChangelistDialog2/67.27.1213.997@67.27.1213.997" timestamp="1581675247953" />
+    <state x="250" y="121" width="836" height="807" key="CommitChangelistDialog2/67.27.1213.997@67.27.1213.997" timestamp="1582732400306" />
     <state x="153" y="282" width="424" height="484" key="FileChooserDialogImpl" timestamp="1581692246762">
       <screen x="67" y="27" width="1213" height="997" />
     </state>
@@ -166,10 +162,10 @@
       <screen x="67" y="27" width="1213" height="997" />
     </state>
     <state x="162" y="160" key="SettingsEditor/67.27.1213.997@67.27.1213.997" timestamp="1580982700388" />
-    <state x="329" y="353" key="com.intellij.ide.util.TipDialog" timestamp="1582704727136">
+    <state x="329" y="353" key="com.intellij.ide.util.TipDialog" timestamp="1583312997050">
       <screen x="67" y="27" width="1213" height="997" />
     </state>
-    <state x="329" y="353" key="com.intellij.ide.util.TipDialog/67.27.1213.997@67.27.1213.997" timestamp="1582704727136" />
+    <state x="329" y="353" key="com.intellij.ide.util.TipDialog/67.27.1213.997@67.27.1213.997" timestamp="1583312997050" />
     <state x="441" y="444" width="454" height="160" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581067764503">
       <screen x="67" y="27" width="1213" height="997" />
     </state>

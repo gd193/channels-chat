@@ -41,9 +41,6 @@ class Notification(models.Model):
     def __hash__(self):
         return hash((self.author.username, self.receiver.username, self.timestamp, self.pk))
 
-    def save(self, *args, **kwargs):
-        self.key = self.__hash__()
-        super(Notification, self).save(*args, **kwargs)
 
 @receiver(models.signals.post_save, sender=Notification)
 def execute_after_save(sender, instance, created, *args, **kwargs):
@@ -51,3 +48,6 @@ def execute_after_save(sender, instance, created, *args, **kwargs):
         user = instance.receiver
         user.count = F('count') + 1
         user.save()
+
+        instance.key = instance.__hash__()
+        instance.save()
